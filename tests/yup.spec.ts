@@ -108,6 +108,31 @@ describe('yup', () => {
       },
     ],
     [
+      'array with nested input object',
+      {
+        textSchema: /* GraphQL */ `
+          input ArrayNestedInput {
+            a: [ArrayNestedInput]
+            b: [ArrayNestedInput!]
+            c: [ArrayNestedInput!]!
+            d: [[ArrayNestedInput]]
+            e: [[ArrayNestedInput]!]
+            f: [[ArrayNestedInput]!]!
+          }
+        `,
+        wantContains: [
+          'export function ArrayNestedInputSchema(): yup.ObjectSchema<ArrayNestedInput>',
+          'a: yup.array(yup.lazy(() => ArrayNestedInputSchema().nullable())).defined().nullable().optional(),',
+          'b: yup.array(yup.lazy(() => ArrayNestedInputSchema().nonNullable())).defined().nullable().optional(),',
+          'c: yup.array(yup.lazy(() => ArrayNestedInputSchema().nonNullable())).defined(),',
+          'd: yup.array(yup.array(yup.lazy(() => ArrayNestedInputSchema().nullable())).defined().nullable()).defined().nullable().optional(),',
+          'e: yup.array(yup.array(yup.lazy(() => ArrayNestedInputSchema().nullable())).defined()).defined().nullable().optional(),',
+          'f: yup.array(yup.array(yup.lazy(() => ArrayNestedInputSchema().nullable())).defined()).defined()',
+        ],
+        scalars: undefined,
+      },
+    ],
+    [
       'nested input object',
       {
         textSchema: /* GraphQL */ `
@@ -118,8 +143,8 @@ describe('yup', () => {
         `,
         wantContains: [
           'export function NestedInputSchema(): yup.ObjectSchema<NestedInput>',
-          'child: yup.lazy(() => NestedInputSchema()).optional(),',
-          'childrens: yup.array(yup.lazy(() => NestedInputSchema())).defined().nullable().optional()',
+          'child: yup.lazy(() => NestedInputSchema().nullable()).optional(),',
+          'childrens: yup.array(yup.lazy(() => NestedInputSchema().nullable())).defined().nullable().optional()',
         ],
         scalars: undefined,
       },

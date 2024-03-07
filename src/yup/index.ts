@@ -292,10 +292,7 @@ const generateFieldTypeYupSchema = (
       }
       return `${gen}.nonNullable()`;
     }
-    const typ = visitor.getType(type.name.value);
-    if (typ?.astNode?.kind === 'InputObjectTypeDefinition') {
-      return `${gen}`;
-    }
+
     return `${gen}.nullable()`;
   }
   console.warn('unhandled type:', type);

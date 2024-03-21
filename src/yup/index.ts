@@ -341,6 +341,8 @@ const yup4Scalar = (config: ValidationSchemaPluginConfig, visitor: Visitor, scal
       return `yup.number().defined()`;
     case 'boolean':
       return `yup.boolean().defined()`;
+    case 'Date':
+      return 'yup.date().defined()';
   }
   console.warn('unhandled name:', scalarName);
   return `yup.mixed()`;

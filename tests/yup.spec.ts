@@ -355,10 +355,12 @@ describe('yup', () => {
     const schema = buildSchema(/* GraphQL */ `
       input ScalarsInput {
         date: Date!
+        dateTime: DateTime!
         email: Email
         str: String!
       }
       scalar Date
+      scalar DateTime
       scalar Email
     `);
     const result = await plugin(
@@ -367,6 +369,7 @@ describe('yup', () => {
       {
         scalarSchemas: {
           Date: 'yup.date()',
+          DateTime: 'yup.date()',
           Email: 'yup.string().email()',
         },
       },
@@ -375,6 +378,7 @@ describe('yup', () => {
     const wantContains = [
       'export function ScalarsInputSchema(): yup.ObjectSchema<ScalarsInput>',
       'date: yup.date().defined().nonNullable(),',
+      'dateTime: yup.date().defined().nonNullable()',
       'email: yup.string().email().defined().nullable().optional(),',
       'str: yup.string().defined().nonNullable()',
     ];
